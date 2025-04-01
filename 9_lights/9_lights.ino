@@ -22,6 +22,9 @@ int colorChangeCounter = 0;
 // Color cycle state
 int colorState = 0; // 0: Red -> Green, 1: Green -> Blue, 2: Blue -> Red
 
+// Hue value for full color cycling
+int hue = 0;
+
 void setup() {
   // Configure red LEDs as outputs
   for (int i = 0; i < NUM_RED_LEDS; i++) {
@@ -46,37 +49,50 @@ void shiftColors() {
   if (colorChangeCounter >= colorChangeInterval) {
     colorChangeCounter = 0;
 
-    // Transition to the next color
-    if (colorState == 0) { // Red -> Green
-      redValue -= pwmStep;
-      greenValue += pwmStep;
-      if (redValue <= 0) {
-        redValue = 0;
-        greenValue = 255;
-        colorState = 1;
-      }
-    } else if (colorState == 1) { // Green -> Blue
-      greenValue -= pwmStep;
-      blueValue += pwmStep;
-      if (greenValue <= 0) {
-        greenValue = 0;
-        blueValue = 255;
-        colorState = 2;
-      }
-    } else if (colorState == 2) { // Blue -> Red
-      blueValue -= pwmStep;
-      redValue += pwmStep;
-      if (blueValue <= 0) {
-        blueValue = 0;
-        redValue = 255;
-        colorState = 0;
-      }
+    hue++;
+    if (hue > 255) {
+      hue = 0;
     }
 
-    // Keep values within bounds
-    redValue = constrain(redValue, 0, 255);
-    greenValue = constrain(greenValue, 0, 255);
-    blueValue = constrain(blueValue, 0, 255);
+    // Convert hue to RGB
+    int sector = hue / 43;
+    int p = 0;
+    int t = hue % 43;
+    t = map(t, 0, 42, 0, 255);
+    int q = 255 - t;
+
+    switch (sector) {
+      case 0:
+        redValue = 255;
+        greenValue = t;
+        blueValue = p;
+        break;
+      case 1:
+        redValue = q;
+        greenValue = 255;
+        blueValue = p;
+        break;
+      case 2:
+        redValue = p;
+        greenValue = 255;
+        blueValue = t;
+        break;
+      case 3:
+        redValue = p;
+        greenValue = q;
+        blueValue = 255;
+        break;
+      case 4:
+        redValue = t;
+        greenValue = p;
+        blueValue = 255;
+        break;
+      default:
+        redValue = 255;
+        greenValue = p;
+        blueValue = q;
+        break;
+    }
   }
 
   // Write the color values to the LED
