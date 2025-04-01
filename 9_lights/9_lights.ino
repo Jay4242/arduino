@@ -16,7 +16,7 @@ int blueValue = 0;
 int pwmStep = 15;  // Increased for faster color changes
 
 // Control the speed of color change
-int colorChangeInterval = 1; // Reduced interval for more frequent changes
+int colorChangeInterval = 5; // Reduced interval for more frequent changes
 int colorChangeCounter = 0;
 
 // Color cycle state
