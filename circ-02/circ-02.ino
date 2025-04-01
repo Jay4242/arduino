@@ -305,18 +305,18 @@ void wildRedGreenSpectacle() {
  * oldSchoolMainframe() - Simulates an old-school computer mainframe with blinking lights
  */
 void oldSchoolMainframe() {
-  int delayTime = 50;
+  int delayTime = 200;
 
   for (int i = 0; i < 8; i++) {
     // More likely to turn on green LEDs
     if (i % 2 != 0) { // Green LEDs
-      if (random(10) < 7) { // 70% chance to turn on
+      if (random(10) < 3) { // 30% chance to turn on
         digitalWrite(ledPins[i], HIGH);
       } else {
         digitalWrite(ledPins[i], LOW);
       }
     } else { // Red LEDs
-      if (random(10) < 4) { // 40% chance to turn on
+      if (random(10) < 2) { // 20% chance to turn on
         digitalWrite(ledPins[i], HIGH);
       } else {
         digitalWrite(ledPins[i], LOW);
