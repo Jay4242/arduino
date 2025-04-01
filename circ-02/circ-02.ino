@@ -15,8 +15,8 @@ int ledPins[] = {2,3,4,5,6,7,8,9}; //An array to hold the pin each LED is connec
                                    //i.e. LED #0 is connected to pin 2, LED #1, 3 and so on
                                    //to address an array use ledPins[0] this would equal 2
                                    //and ledPins[7] would equal 9
-const int redLEDs[] = {2,4,6,8};
-const int greenLEDs[] = {3,5,7,9};
+const int redLEDs[] = {2,4,6,8};   // Array to hold the pins connected to the red LEDs
+const int greenLEDs[] = {3,5,7,9}; // Array to hold the pins connected to the green LEDs
 
 /*
  * setup() - this function runs once when you turn your Arduino on
@@ -39,7 +39,8 @@ void setup()
  */
 void loop()                     // run over and over again
 {
-  oldSchoolMainframe();
+  larsonScanner();
+  //oldSchoolMainframe();
   //wildRedGreenSpectacle();
   //redAndGreenDance();
 }
@@ -317,11 +318,51 @@ void oldSchoolMainframe() {
       }
     } else { // Red LEDs
       if (random(10) < 2) { // 20% chance to turn on
+      // The expression random(10) < x means there is x/10 chance of the LED turning on
         digitalWrite(ledPins[i], HIGH);
       } else {
         digitalWrite(ledPins[i], LOW);
       }
     }
   }
+  delay(delayTime);
+}
+
+/*
+ * larsonScanner() - Creates a Larson Scanner effect (like Knight Rider, but smoother)
+ */
+void larsonScanner() {
+  int delayTime = 20; // Adjust for speed
+  static int position = 0;
+  static int direction = 1;
+  int fadeAmount = 30; // Adjust for fade speed
+
+  // Dim all LEDs
+  for (int i = 0; i < 8; i++) {
+    analogWrite(ledPins[i], 0); // Set all LEDs to off initially
+  }
+
+  // Move the lit LED
+  position += direction;
+  if (position >= 7) {
+    position = 6;
+    direction = -1;
+  } else if (position <= 0) {
+    position = 1;
+    direction = 1;
+  }
+
+  // Light the current LED with a fading effect
+  int brightness = 255; // Full brightness
+  analogWrite(ledPins[position], brightness);
+
+  // Fade adjacent LEDs
+  if (position > 0) {
+    analogWrite(ledPins[position - 1], brightness - fadeAmount);
+  }
+  if (position < 7) {
+    analogWrite(ledPins[position + 1], brightness - fadeAmount);
+  }
+
   delay(delayTime);
 }
