@@ -39,10 +39,89 @@ void setup()
  */
 void loop()                     // run over and over again
 {
-  larsonScanner();
+  //redGreenCodeDance();
+  //larsonScanner();
   //oldSchoolMainframe();
   //wildRedGreenSpectacle();
   //redAndGreenDance();
+  matrixMadness();
+}
+
+/*
+ * matrixMadness() - Rapidly switches LEDs on and off in a seemingly random pattern to push the Arduino's limits.
+ */
+void redGreenCodeDance() {
+  // Green LEDs flash random pattern
+  for (int i = 0; i < 4; i++) {
+    int numberOfFlashes = random(50) + 1; // Random number of flashes (1-50)
+    for (int j = 0; j < numberOfFlashes; j++) {
+      int delayTime = random(200) + 100; // Random delay time between 100-300 ms
+
+      // Ensure the LED is off before potentially turning it on
+      digitalWrite(greenLEDs[i], LOW);
+
+      int action = random(4);           // 0: HIGH, 1: No change, 2: No change,  3: HIGH
+      if (action == 0 || action == 3) {
+        digitalWrite(greenLEDs[i], HIGH);
+      }
+      if (random(10) < 9) {           // 90% chance of delay
+        delay(delayTime);
+      }
+    }
+    digitalWrite(greenLEDs[i], LOW); // Ensure it's off after the sequence
+  }
+  delay(random(300) + 100); // Pause between green and red (100-400ms)
+
+  // Red LEDs flash random pattern
+  for (int i = 0; i < 4; i++) {
+    int numberOfFlashes = random(50) + 1; // Random number of flashes (1-50)
+    for (int j = 0; j < numberOfFlashes; j++) {
+      int delayTime = random(200) + 100; // Random delay time between 100-300 ms
+
+      // Ensure the LED is off before potentially turning it on
+      digitalWrite(redLEDs[i], LOW);
+
+      int action = random(4);           // 0: HIGH, 1: No change, 2: No change,  3: HIGH
+      if (action == 0 || action == 3) {
+        digitalWrite(redLEDs[i], HIGH);
+      }
+      if (random(10) < 9) {           // 90% chance of delay
+        delay(delayTime);
+      }
+    }
+    digitalWrite(redLEDs[i], LOW);   // Ensure it's off after the sequence
+  }
+  delay(random(300) + 100); // Pause after red (100-400ms)
+}
+
+/*
+ * matrixMadness() - Rapidly switches LEDs on and off in a seemingly random pattern to push the Arduino's limits.
+ */
+void matrixMadness() {
+  int duration = random(50) + 50; // Reduced duration
+  int fadeAmount = 15; // Amount to fade each step
+  int baseDelay = 10; // Base delay for fading
+
+  for (int i = 0; i < duration; i++) {
+    for (int j = 0; j < 8; j++) {
+      if (random(10) < 3) { // Reduced frequency of changes
+        // Fade LED in
+        for (int brightness = 0; brightness <= 255; brightness += fadeAmount) {
+          analogWrite(ledPins[j], brightness);
+          delay(baseDelay);
+        }
+        analogWrite(ledPins[j], 255); // Ensure fully on
+      } else {
+        // Fade LED out
+        for (int brightness = 255; brightness >= 0; brightness -= fadeAmount) {
+          analogWrite(ledPins[j], brightness);
+          delay(baseDelay);
+        }
+        analogWrite(ledPins[j], 0); // Ensure fully off
+      }
+    }
+    delay(20); // Small delay between frames
+  }
 }
 
 /*
