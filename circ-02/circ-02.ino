@@ -99,25 +99,35 @@ void redGreenCodeDance() {
  */
 void matrixMadness() {
   int duration = random(50) + 50; // Reduced duration
-  int fadeAmount = 15; // Amount to fade each step
   int baseDelay = 10; // Base delay for fading
+  int ledBrightness[8] = {0, 0, 0, 0, 0, 0, 0, 0}; // Store brightness of each LED
 
   for (int i = 0; i < duration; i++) {
     for (int j = 0; j < 8; j++) {
       if (random(10) < 3) { // Reduced frequency of changes
+        int fadeAmount = random(10) + 5; // Random fade amount
+        delay(random(50)); // Stochastic pause before fading in
+
         // Fade LED in
-        for (int brightness = 0; brightness <= 255; brightness += fadeAmount) {
+        for (int brightness = ledBrightness[j]; brightness <= 255; brightness += fadeAmount) {
           analogWrite(ledPins[j], brightness);
+          ledBrightness[j] = brightness; // Update stored brightness
           delay(baseDelay);
         }
         analogWrite(ledPins[j], 255); // Ensure fully on
+        ledBrightness[j] = 255;
       } else {
+        int fadeAmount = random(10) + 5; // Random fade amount
+        delay(random(50)); // Stochastic pause before fading out
+
         // Fade LED out
-        for (int brightness = 255; brightness >= 0; brightness -= fadeAmount) {
+        for (int brightness = ledBrightness[j]; brightness >= 0; brightness -= fadeAmount) {
           analogWrite(ledPins[j], brightness);
+          ledBrightness[j] = brightness; // Update stored brightness
           delay(baseDelay);
         }
         analogWrite(ledPins[j], 0); // Ensure fully off
+        ledBrightness[j] = 0;
       }
     }
     delay(20); // Small delay between frames
