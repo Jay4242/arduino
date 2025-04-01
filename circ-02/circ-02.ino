@@ -39,12 +39,7 @@ void setup()
  */
 void loop()                     // run over and over again
 {
-  //redGreenCodeDance();
-  //larsonScanner();
-  //oldSchoolMainframe();
-  //wildRedGreenSpectacle();
-  //redAndGreenDance();
-  matrixMadness();
+  knightRiderRGB();
 }
 
 /*
@@ -415,6 +410,58 @@ void oldSchoolMainframe() {
     }
   }
   delay(delayTime);
+}
+
+/*
+ * knightRiderRGB() - A single LED moves back and forth, alternating between green and red LEDs
+ */
+void knightRiderRGB() {
+  for(int i = 0; i < 8; i++){
+    knightRiderColor(greenLEDs);
+  }
+  // Turn off all green LEDs
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(greenLEDs[i], LOW);
+  }
+  for(int i = 0; i < 8; i++){
+    knightRiderColor(redLEDs);
+  }
+  // Turn off all red LEDs
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(redLEDs[i], LOW);
+  }
+}
+
+/*
+ * knightRiderColor() - A single LED moves back and forth for a given color
+ */
+void knightRiderColor(const int leds[]) {
+  int delayTime = 100;
+  static int position = 0;
+  static int direction = 1;  // 1 for forward, -1 for backward
+
+  // Turn off all LEDs
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(leds[i], LOW);
+  }
+
+  // Turn on the LED at the current position
+  digitalWrite(leds[position], HIGH);
+  delay(delayTime);
+
+  // Turn off the LED at the current position
+  digitalWrite(leds[position], LOW);
+
+  // Update the position
+  position += direction;
+
+  // Reverse direction if we reach the end
+  if (position == 3 || position == 0) {
+    direction = -direction;
+  }
+
+  // Turn on the LED at the current position
+  digitalWrite(leds[position], HIGH);
 }
 
 /*
